@@ -68,6 +68,107 @@
         .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
         .cake { font-size: 4rem; margin: 10px 0; }
         .full-wish { font-style: italic; color: #666; font-size: 0.9rem; line-height: 1.4; max-height: 250px; overflow-y: auto; }
+
+        /* Halaman 4: Game Teka Teki */
+        .game-container { text-align: center; }
+        .puzzle-number { font-size: 0.9rem; color: #999; margin-bottom: 10px; }
+        .puzzle-clue { 
+            background: #f0f0f0; 
+            padding: 20px; 
+            border-radius: 10px; 
+            margin: 20px 0; 
+            font-size: 1.1rem;
+            color: #333;
+            font-style: italic;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .answer-input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            transition: border-color 0.3s;
+        }
+        .answer-input:focus { 
+            outline: none; 
+            border-color: #ff4d6d;
+        }
+        .answer-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .answer-buttons button {
+            flex: 1;
+            padding: 12px;
+        }
+        .answer-buttons .check-btn {
+            background: #ff4d6d;
+        }
+        .answer-buttons .next-btn {
+            background: #4d96ff;
+        }
+        .answer-buttons .next-btn:hover {
+            background: #6db3ff;
+        }
+        .feedback {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 600;
+            min-height: 30px;
+            display: none;
+        }
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            display: block;
+        }
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+        .score-display {
+            font-size: 1.2rem;
+            color: #ff4d6d;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .game-over {
+            display: none;
+            text-align: center;
+        }
+        .game-over h2 {
+            color: #ff4d6d;
+            font-size: 2rem;
+            margin: 20px 0;
+        }
+        .final-score {
+            background: #f0f0f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .button-group button {
+            flex: 1;
+        }
     </style>
 </head>
 <body>
@@ -86,10 +187,48 @@
         <div id="page2" class="page">
             <h2>Waktunya Merayakan! ✨</h2>
             <p>Semoga harimu penuh cinta dan bintang-bintang!</p>
-            <button onclick="nextPage(3)">Lihat Siapa yang Spesial</button>
+            <div style="display: flex; gap: 10px; flex-direction: column;">
+                <button onclick="nextPage(4)" style="background: #4d96ff;">Mainkan Game Teka Teki</button>
+                <button onclick="nextPage(3)">Lihat Siapa yang Spesial</button>
+            </div>
         </div>
 
     <audio src="music.mp3" autoplay loop controls style="position: fixed; bottom: 10px; right: 10px; width: 200px;"></audio>
+
+        <!-- Halaman 4: Game Teka Teki Kata -->
+        <div id="page4" class="page">
+            <div class="game-container">
+                <h2>🎮 Game Teka Teki Kata</h2>
+                <div class="score-display">Skor: <span id="scoreDisplay">0</span>/10</div>
+                
+                <!-- Game Content -->
+                <div id="gameContent" style="display: block;">
+                    <div class="puzzle-number">Soal <span id="puzzleNumber">1</span> dari 10</div>
+                    <div class="puzzle-clue" id="puzzleClue">Memuat...</div>
+                    
+                    <input type="text" id="answerInput" class="answer-input" placeholder="Ketik jawabanmu di sini..." autocomplete="off">
+                    
+                    <div class="feedback" id="feedback"></div>
+                    
+                    <div class="answer-buttons">
+                        <button class="check-btn" onclick="checkAnswer()">Periksa Jawaban</button>
+                        <button class="next-btn" id="nextBtn" onclick="nextPuzzle()" style="display: none;">Soal Berikutnya</button>
+                    </div>
+                </div>
+                
+                <!-- Game Over Screen -->
+                <div class="game-over" id="gameOverScreen">
+                    <h2>🎉 Permainan Selesai!</h2>
+                    <div class="final-score">
+                        Skor Akhir: <span id="finalScore">0</span>/10
+                    </div>
+                    <div class="button-group">
+                        <button onclick="restartGame()" style="background: #ff4d6d;">Main Lagi</button>
+                        <button onclick="nextPage(3)" style="background: #4d96ff;">Kembali ke Menu</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <!-- Halaman 3: Foto & Ucapan Lengkap -->
         <div id="page3" class="page">
@@ -97,22 +236,106 @@
                 <!-- Ganti 'images/person.jpg' dengan foto asli nanti -->
                 <img src="images/person.jpg" alt="Foto Ulang Tahun" onerror="this.src='https://via.placeholder.com/200?text=Foto+Kamu'">
             </div>
-
-    <audio src="music.mp3" autoplay loop controls style="position: fixed; bottom: 10px; right: 10px; width: 200px;"></audio>
             <div class="cake">🎂</div>
-
-    <audio src="music.mp3" autoplay loop controls style="position: fixed; bottom: 10px; right: 10px; width: 200px;"></audio>
             <h1>Happy Birthday!</h1>
             <p class="full-wish">"Selamat ulang tahun yang ke-18 sayanggg di hari yang spesial ini, semoga kamu dilimpahi keberuntungan, kekayaan, dan kesehatan yang melimpah. semoga segala urusanmu dilancarkan, dijauhkah dari segala masalah, impian-impian kamu tercapai, dan hidupmu penuh dengan kebahagiaan. teruslah menjadi pribadi yang luar biasa, dan jadilah inspirasi bagi orang-orang di sekitar kamu. semoga tahun ini, kesuksesan selalu di kehidupan kamu, serta hubungan yang harmonis dengan keluarga dan teman-teman, teruslah semangat dan jangan mudah menyerah, i always support you and accompany you. Kamu adalah cahaya di hidupku, Happy birthday, my love! 🎉❤️ <i>#salamboyahh</i>"</p>
             <button onclick="restart()">Ulangi</button>
         </div>
-
-    <audio src="music.mp3" autoplay loop controls style="position: fixed; bottom: 10px; right: 10px; width: 200px;"></audio>
     </div>
 
     <audio src="music.mp3" autoplay loop controls style="position: fixed; bottom: 10px; right: 10px; width: 200px;"></audio>
 
     <script>
+        // Game Data
+        const puzzles = [
+            { clue: "Hewan yang terkenal karena bertelinga panjang", answer: "kelinci" },
+            { clue: "Buah berwarna merah yang manis dan nikmat", answer: "strawberry" },
+            { clue: "Ibu kota Indonesia", answer: "jakarta" },
+            { clue: "Warna pelangi yang paling banyak dibuat kue ini", answer: "biru" },
+            { clue: "Hari raya besar agama Islam", answer: "lebaran" },
+            { clue: "Permainan yang dimainkan dengan bola bundar dan 2 keranjang", answer: "basket" },
+            { clue: "Makanan ringan yang terbuat dari jagung goreng dan wangi", answer: "popcorn" },
+            { clue: "Pemimpin tertinggi suatu negara", answer: "presiden" },
+            { clue: "Alat untuk menghitung yang menggunakan biji-biji kecil", answer: "sempoa" },
+            { clue: "Waktu ketika matahari terbenam", answer: "sore" }
+        ];
+
+        let currentPuzzle = 0;
+        let score = 0;
+        let answered = false;
+
+        function initGame() {
+            currentPuzzle = 0;
+            score = 0;
+            answered = false;
+            document.getElementById('gameContent').style.display = 'block';
+            document.getElementById('gameOverScreen').style.display = 'none';
+            loadPuzzle();
+        }
+
+        function loadPuzzle() {
+            if (currentPuzzle < puzzles.length) {
+                const puzzle = puzzles[currentPuzzle];
+                document.getElementById('puzzleClue').textContent = puzzle.clue;
+                document.getElementById('puzzleNumber').textContent = currentPuzzle + 1;
+                document.getElementById('answerInput').value = '';
+                document.getElementById('answerInput').focus();
+                document.getElementById('feedback').textContent = '';
+                document.getElementById('feedback').className = 'feedback';
+                document.getElementById('feedback').style.display = 'none';
+                document.querySelector('.check-btn').style.display = 'block';
+                document.getElementById('nextBtn').style.display = 'none';
+                answered = false;
+            }
+        }
+
+        function checkAnswer() {
+            if (answered) return;
+            
+            const userAnswer = document.getElementById('answerInput').value.toLowerCase().trim();
+            const correctAnswer = puzzles[currentPuzzle].answer.toLowerCase().trim();
+            const feedback = document.getElementById('feedback');
+
+            answered = true;
+
+            if (userAnswer === correctAnswer) {
+                score++;
+                feedback.className = 'feedback correct';
+                feedback.textContent = '✓ Benar! Jawaban kamu sempurna! 🎉';
+            } else {
+                feedback.className = 'feedback incorrect';
+                feedback.textContent = `✗ Salah. Jawaban yang benar adalah: "${correctAnswer}"`;
+            }
+
+            feedback.style.display = 'block';
+            document.getElementById('scoreDisplay').textContent = score;
+            document.querySelector('.check-btn').style.display = 'none';
+            document.getElementById('nextBtn').style.display = 'block';
+            document.getElementById('answerInput').disabled = true;
+        }
+
+        function nextPuzzle() {
+            currentPuzzle++;
+            document.getElementById('answerInput').disabled = false;
+
+            if (currentPuzzle < puzzles.length) {
+                loadPuzzle();
+            } else {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            document.getElementById('gameContent').style.display = 'none';
+            document.getElementById('gameOverScreen').style.display = 'block';
+            document.getElementById('finalScore').textContent = score;
+        }
+
+        function restartGame() {
+            initGame();
+        }
+
+        // Page Navigation
         function nextPage(num) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('page' + num).classList.add('active');
@@ -165,6 +388,17 @@
                 });
             }, 250);
         }
+
+        // Initialize game on page load
+        window.addEventListener('load', function() {
+            const observer = new MutationObserver(function() {
+                if (document.getElementById('page4').classList.contains('active')) {
+                    initGame();
+                }
+            });
+            
+            observer.observe(document.querySelector('.container'), { attributes: true, subtree: true });
+        });
     </script>
 </body>
 </html>
